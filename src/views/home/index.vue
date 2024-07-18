@@ -2,9 +2,9 @@
   <div class="layout">
     <Header>重症数字孪生大屏</Header>
     <div class="layout-content">
-      <!-- <div class="layout-content-left">
-        <ProjectDetailChart />
-      </div> -->
+      <div class="layout-content-left">
+        <ProjectDetailChart name="关注项目详情" />
+      </div>
       <!-- <div class="layout-content-right">
         <Panel>
           <LineCharts></LineCharts>
@@ -24,12 +24,12 @@ import LineCharts from "@/components/Charts/LineChart.vue";
 import PieChart from "@/components/Charts/PieChart.vue";
 </script>
 
-<style scope lang="scss">
+<style scope>
 .layout {
   width: 100vw;
   height: 100vh;
   background-color: radial-gradient(52% 62% at 50% 50%, #1a1a1a 0%, #050407 100%);
-  background-image: url("../assets/images/home-bg.png");
+  background-image: url("@/assets/images/home-bg.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -39,13 +39,12 @@ import PieChart from "@/components/Charts/PieChart.vue";
 .layout-content {
   width: 100vw;
   height: 100vh;
-  background-color: #fff;
 }
 .layout-content-left {
   position: absolute;
   left: 0.6rem;
   top: 70px;
-  width: 30vw;
+  /* width: 30vw; */
 }
 .layout-content-right {
   position: absolute;

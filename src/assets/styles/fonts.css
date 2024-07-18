@@ -6,6 +6,13 @@
 }
 
 @font-face {
+  font-family: "SourceHanSans-Regular";
+  src: url("../fonts/NotoSansHans-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "SourceHanSans-Bold";
   src: url("../fonts/NotoSansHans-Bold.otf") format("opentype");
   font-weight: bold;
@@ -22,14 +29,14 @@
   src: url("../fonts/AlibabaPuHuiTi-3-75-SemiBold.woff2");
 }
 
-* {
+body {
   padding: 0;
   margin: 0;
   list-style: none;
   font-style: normal;
   text-decoration: none;
   box-sizing: border-box;
-  font-family: SourceHanSans-Black;
+  font-family: SourceHanSans-Regular;
 }
 
 :root {

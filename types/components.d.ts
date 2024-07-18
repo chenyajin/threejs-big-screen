@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    CuButton: typeof import('./../src/components/cu-button/index.vue')['default']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     LineChart: typeof import('./../src/components/Charts/LineChart.vue')['default']

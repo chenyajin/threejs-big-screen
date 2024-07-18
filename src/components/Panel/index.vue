@@ -1,8 +1,6 @@
 <template>
   <div class="panel">
-    <slot name="title">
-      <div class="panel-title">{{ title }}</div>
-    </slot>
+    <div v-if="title" class="panel-title">{{ title }}</div>
     <div class="panel-content">
       <slot></slot>
     </div>
@@ -13,7 +11,7 @@
 defineProps({
   title: {
     type: String,
-    default: "标题"
+    default: ""
   }
 });
 </script>

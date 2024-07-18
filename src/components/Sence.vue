@@ -1,5 +1,9 @@
 <template>
-  <div></div>
+  <div class="top-button-wrapper">
+    <CuButton class="button-item" name="轴视图" @click="onLookLeft" />
+    <CuButton class="button-item" name="俯视图" @click="onLookDown" />
+    <CuButton class="button-item" name="正视图" @click="onLookFront" />
+  </div>
   <div id="three"></div>
   <Popover ref="popoverRef" :top="popoverTop" :left="popoverLeft" :data="popoverData"></Popover>
 </template>
@@ -15,8 +19,11 @@ import gsap from "gsap";
 import Event from "@/modules/Viewer/Events";
 import BoxHelperWrap from "@/modules/BoxHelperWrap";
 import { checkNameIncludes, findParent } from "@/utils";
+import { demoData } from "@/mock/floorData";
+import { bedConfigs } from "@/mock/position";
 
 import Popover from "./Popover/index.vue";
+import CuButton from "@/components/cu-button/index.vue";
 
 let viewer: Viewer;
 let modelLoader: ModelLoader;
@@ -40,9 +47,9 @@ onMounted(() => {
   init();
   initModel();
 
-  viewer.scene.traverse((item: THREE.Object3D) => {
-    console.log(item, "0000000000");
-  });
+  // viewer.scene.traverse((item: THREE.Object3D) => {
+  //   console.log(item, "0000000000");
+  // });
 });
 
 const init = () => {
@@ -67,71 +74,95 @@ const init = () => {
 };
 
 const initModel = () => {
-  // modelLoader.loadModelToScene('/models/zuo.glb', baseModel => {
-  //   console.log(baseModel, '1111111');
-
-  //   baseModel.setScalc(0.01);
-  //   const model = baseModel.gltf.scene;
-  //   office = baseModel;
-  //   office.object.rotation.y = Math.PI;
-  //   office.object.position.set(2, 0, 0);
-  //   // model.position.set(80, 2, 90);
-  //   office.object.children.forEach((item: any) => {
-  //     item.name = item.name.replace('zuo', '');
-  //     if (item.name === 'ding') {
-  //       item.name = 6;
-  //     }
-  //     item.name--;
-  //   });
-  //   office.object.children.sort((a: { name: number; }, b: { name: number; }) => a.name - b.name).forEach((v: { name: string; }) => {
-  //     v.name = 'zuo' + v.name;
-  //   });
-
-  //   model.name = '办公楼';
-  //   baseModel.openCastShadow();
-  //   oldOffice = model.clone();
-
-  //   const list: THREE.Object3D<THREE.Event>[] = [];
-  //   model.traverse(item => {
-  //     list.push(item);
-  //   });
-  //   viewer.setRaycasterObjects(list);
-  // });
-
-  // modelLoader.loadModelToScene('/models/plane.glb', (baseModel) => {
-  //   const model = baseModel.gltf.scene
-  //   model.scale.set(0.0001 * 3, 0.0001 * 3, 0.0001 * 3)
-  //   model.position.set(0, 0, 0)
-  //   model.name = 'plane'
-  //   baseModel.openCastShadow()
-
-  //   const texture = (baseModel.object.children[0] as any).material.map
-  //   console.log(texture, 'texture-------')
-  //   const fnOnj = planeAnimate(texture)
-  //   viewer.addAnimate(fnOnj)
-  // })
-
-  modelLoader.loadModelToScene("/models/model-small.glb", baseModel => {
-    baseModel.setScalc(0.15);
+  modelLoader.loadModel("/models/model-small.glb", gltf => {
+    // baseModel.setScalc(0.15);
     // baseModel.object.rotation.y = Math.PI / 2;
-    const model = baseModel.gltf.scene;
-    model.position.set(-6, -3, 0);
-    model.name = "机房";
-    baseModel.openCastShadow();
+    const mesh = gltf.scene;
+    centerModel(mesh);
+    loadMiniBed();
+    // init();
+    // modelLoader.viewer.initViewer();
+    // model.position.set(-6, -3, 0);
+    // model.name = "机房";
+    // baseModel.openCastShadow();
 
-    dataCenter = baseModel;
-    oldDataCenter = model.clone();
+    // dataCenter = baseModel;
+    // oldDataCenter = model.clone();
 
-    const rackList: any[] = [];
-    model.traverse(item => {
-      if (checkIsRack(item)) {
-        rackList.push(item);
-      }
-    });
-    // console.log(rackList, 'rackList------');
+    // const rackList: any[] = [];
+    // model.traverse(item => {
+    //   if (checkIsRack(item)) {
+    //     rackList.push(item);
+    //   }
+    // });
+    // // console.log(rackList, 'rackList------');
 
-    viewer.setRaycasterObjects(rackList);
+    // viewer.setRaycasterObjects(rackList);
   });
+};
+
+// 模型局中
+const centerModel = obj => {
+  // 计算模型的包围盒
+  const box = new THREE.Box3().setFromObject(obj);
+  const center = new THREE.Vector3();
+
+  // 计算模型中心
+  box.getCenter(center);
+
+  let ratio = 1;
+
+  // 将模型中心平移到场景的原点
+  obj.translateX(-center.x * ratio);
+  // obj.translateY(-center.y * ratio);
+  obj.translateZ(-center.z * ratio);
+
+  // 缩小模型
+  obj.scale.set(ratio, ratio, ratio); // 将模型缩小至原来的50%
+};
+
+const loadMiniBed = () => {
+  const bedsData = demoData.data;
+  bedConfigs.forEach((bedInfo, i) => {
+    if (bedInfo.length > 0) {
+      let bed = bedsData.find(t => t.dic_bed_id == i + 1);
+      if (bed && bed.enum_sex && bed.enum_sex == 1) {
+        addMaleBed(bedInfo[0], bedInfo[1], bedInfo[2], bedInfo[3]);
+      } else if (bed && bed.enum_sex && bed.enum_sex == 2) {
+        addFemaleBed(bedInfo[0], bedInfo[1], bedInfo[2], bedInfo[3]);
+      } else {
+        addEmptyBed(bedInfo[0], bedInfo[1], bedInfo[2], bedInfo[3]);
+      }
+    }
+  });
+};
+
+// 添加空床位
+const addEmptyBed = (x, y, z, rotation) => {
+  modelLoader.loadBed(x, y, z, rotation, "models/model-bed-default.glb");
+};
+
+// 添加女床位
+const addMaleBed = (x, y, z, rotation) => {
+  modelLoader.loadBed(x, y, z, rotation, "models/model-bed-male.glb");
+};
+
+// 添加男床位
+const addFemaleBed = (x, y, z, rotation) => {
+  modelLoader.loadBed(x, y, z, rotation, "models/model-bed-female.glb");
+};
+
+// 轴视图
+const onLookLeft = () => {
+  modelLoader.setLookLeft();
+};
+// 俯视图
+const onLookDown = () => {
+  modelLoader.setLookDown();
+};
+// 正视图
+const onLookFront = () => {
+  modelLoader.setLookFront();
 };
 
 const planeAnimate = (texture: any): Animate => {
@@ -339,5 +370,15 @@ const selectOffice = (model: any) => {
 #three {
   height: 100%;
   width: 100%;
+}
+.top-button-wrapper {
+  position: absolute;
+  top: 1.1rem;
+  display: flex;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.button-item {
+  margin: 0 0.1rem;
 }
 </style>
