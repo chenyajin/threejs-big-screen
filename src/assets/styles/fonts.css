@@ -1,0 +1,37 @@
+@font-face {
+  font-family: "SourceHanSans-Black";
+  src: url("../fonts/NotoSansHans-Black.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SourceHanSans-Bold";
+  src: url("../fonts/NotoSansHans-Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: DingTalkSans;
+  src: url("../fonts/DingTalkJinBuTi.woff2");
+}
+
+@font-face {
+  font-family: AlibabaPuHuiTi-3;
+  src: url("../fonts/AlibabaPuHuiTi-3-75-SemiBold.woff2");
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-style: normal;
+  text-decoration: none;
+  box-sizing: border-box;
+  font-family: SourceHanSans-Black;
+}
+
+:root {
+  --un-shadow-color: rgba(0, 0, 0, 0.9);
+}

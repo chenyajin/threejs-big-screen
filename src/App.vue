@@ -1,23 +1,25 @@
 <template>
-  <div class="main">
-    <Layout></Layout>
-  </div>
+  <el-config-provider :size="elConfig.size" :z-index="elConfig.zIndex">
+    <router-view />
+  </el-config-provider>
 </template>
 
-<script lang="ts" setup>
-import Layout from './layout/index.vue';
-
+<script setup>
+const elConfig = ref({
+  size: "default",
+  zIndex: 300
+});
 </script>
-
 <style>
-body, html {
+body,
+html {
   background-color: #000;
 }
 body {
   overflow: hidden;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: SourceHanSans-Black;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -25,14 +27,5 @@ body {
   /* margin-top: 10px; */
   /* box-sizing: border-box; */
   /* width: 100%; */
-}
-
-.main {
-  /* width: 100vw; */
-  /* height: 100%; */
-  /* background-image: linear-gradient(90deg, rgba(1, 53, 80, 0.3490196078) 1px, transparent 1px), linear-gradient(0deg, rgba(1, 53, 80, 0.3490196078) 1px, transparent 1px);
-  background-size: 30px 30px, 30px 30px; */
-  /* min-width: 850px; */
-  /* box-sizing: border-box; */
 }
 </style>
