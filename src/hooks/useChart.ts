@@ -1,13 +1,10 @@
-import { type Ref, onUnmounted, nextTick } from 'vue';
-import * as echarts from 'echarts';
-import { throttle } from 'lodash-es';
-import { useResize } from './useResize';
-import type { EChartsOption, ECharts } from 'echarts';
+import { type Ref, onUnmounted, nextTick } from "vue";
+import * as echarts from "echarts";
+import { throttle } from "lodash-es";
+import { useResize } from "./useResize";
+import type { EChartsOption, ECharts } from "echarts";
 
-export function useChart(
-  elRef: Ref,
-  theme?:string
-) {
+export function useChart(elRef: Ref, theme?: string) {
   let chartsInstenceRef: ECharts | null = null;
   let resizeFn = resize;
   const debounceResize = throttle(resizeFn, 200);
@@ -39,6 +36,6 @@ export function useChart(
   });
   return {
     setOptions,
-    echarts,
+    echarts
   };
 }

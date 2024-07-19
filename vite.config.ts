@@ -14,9 +14,8 @@ export default defineConfig({
   plugins: [
     vue(),
     createSvgIconsPlugin({
-      // 配置路劲在你的src里的svg存放文件
-      iconDirs: [path.resolve(process.cwd(), "src/assets/svg")],
-      symbolId: "icon-[name]"
+      iconDirs: [path.resolve(__dirname, "src/assets/icons/svg")],
+      symbolId: "icon-[dir]-[name]"
     }),
     AutoImport({
       include: [

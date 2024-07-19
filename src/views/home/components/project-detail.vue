@@ -72,40 +72,46 @@ const tableData = reactive([
 }
 .header-row {
   color: #abdfff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 .content-row {
   color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  &:last-child {
+    border-bottom: none;
+  }
 }
 .share-item {
   display: inline-block;
   text-align: left;
   font-weight: normal;
-  height: 0.55rem;
-  line-height: 0.55rem;
+  height: 0.4rem;
+  line-height: 0.4rem;
+  padding-left: 0.1rem;
 }
 .square-index {
   display: inline-block;
-  width: 0.3rem;
-  height: 0.3rem;
-  line-height: 0.3rem;
+  width: 0.18rem;
+  height: 0.18rem;
+  line-height: 0.18rem;
   text-align: center;
   background: linear-gradient(135deg, rgba(24, 94, 158, 0.6) 0%, rgba(24, 94, 158, 0) 99%);
   border: 1px solid rgba(31, 135, 204, 0.2);
 }
 .item-0 {
-  width: 0.6rem;
-  padding-left: 0.1rem;
+  width: 0.3rem;
+  // padding-left: 0.1rem;
 }
 .item-1 {
-  width: 1.4rem;
+  width: 0.86rem;
 }
 .item-2 {
-  width: 0.6rem;
+  width: 0.7rem;
 }
 .item-3 {
-  width: 0.6rem;
+  width: 0.7rem;
 }
 .item-4 {
-  width: 0.5rem;
+  width: 0.7rem;
 }
 </style>

@@ -21,16 +21,11 @@ defineProps({
   z-index: 2;
 }
 .panel-title {
-  height: 0.5rem;
   margin-top: 0.2rem;
-  margin-bottom: 0.25rem;
-  font-size: 0.25rem;
-  font-weight: bold;
+  margin-bottom: 0.2rem;
+  font-size: 0.2rem;
   text-align: left;
-
-  /* font-size: 20px; */
-  font-weight: 500;
-  line-height: 32px;
+  font-weight: 600;
   letter-spacing: 0.04em;
   color: #77d1fa;
 }

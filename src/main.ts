@@ -4,6 +4,7 @@ import { setupRouter } from "./router/index";
 import ElementPlus from "element-plus";
 import zhLocale from "element-plus/es/locale/lang/zh-cn";
 import "@/assets/styles/index.scss";
+import "virtual:svg-icons-register";
 import SvgIcon from "@/components/svgIcon/index.vue";
 
 const app = createApp(App);

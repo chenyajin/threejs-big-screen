@@ -5,12 +5,19 @@
       <div class="layout-content-left">
         <ProjectDetailChart name="关注项目详情" />
       </div>
-      <!-- <div class="layout-content-right">
-        <Panel>
+      <div class="layout-content-right">
+        <BuildingDetailChart />
+        <!-- <Panel>
           <LineCharts></LineCharts>
-        </Panel>
-      </div> -->
+        </Panel> -->
+      </div>
       <Sence></Sence>
+      <div class="layout-content-bottom">
+        <Analysis1 />
+        <Analysis2 />
+        <Analysis3 />
+        <Analysis4 />
+      </div>
     </div>
   </div>
 </template>
@@ -18,10 +25,12 @@
 <script setup lang="ts" name="Layout">
 import Header from "@/layout/components/Header.vue";
 import ProjectDetailChart from "./components/project-detail.vue";
+import BuildingDetailChart from "./components/building-detail.vue";
 import Sence from "@/components/Sence.vue";
-import Panel from "@/components/Panel/index.vue";
-import LineCharts from "@/components/Charts/LineChart.vue";
-import PieChart from "@/components/Charts/PieChart.vue";
+import Analysis1 from "./components/analysis-1.vue";
+import Analysis2 from "./components/analysis-2.vue";
+import Analysis3 from "./components/analysis-3.vue";
+import Analysis4 from "./components/analysis-4.vue";
 </script>
 
 <style scope>
@@ -42,15 +51,22 @@ import PieChart from "@/components/Charts/PieChart.vue";
 }
 .layout-content-left {
   position: absolute;
-  left: 0.6rem;
-  top: 70px;
+  left: 0.5rem;
+  top: 1rem;
   /* width: 30vw; */
 }
 .layout-content-right {
   position: absolute;
-  right: 0.6rem;
+  right: 0.63rem;
   top: 70px;
-  width: 30vw;
+  width: 2.59rem;
+}
+.layout-content-bottom {
+  display: flex;
+  position: absolute;
+  bottom: 0.4rem;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .panel {
   margin-bottom: 0.3rem;

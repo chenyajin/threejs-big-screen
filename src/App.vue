@@ -19,7 +19,7 @@ body {
   overflow: hidden;
 }
 #app {
-  font-family: SourceHanSans-Black;
+  font-family: SourceHanSans-Regular;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

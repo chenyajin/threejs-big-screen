@@ -373,12 +373,12 @@ const selectOffice = (model: any) => {
 }
 .top-button-wrapper {
   position: absolute;
-  top: 1.1rem;
+  top: 1.2rem;
   display: flex;
   left: 50%;
   transform: translateX(-50%);
 }
 .button-item {
-  margin: 0 0.1rem;
+  margin: 0 0.24rem;
 }
 </style>

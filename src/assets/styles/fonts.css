@@ -42,3 +42,7 @@ body {
 :root {
   --un-shadow-color: rgba(0, 0, 0, 0.9);
 }
+
+.font-source-black {
+  font-family: SourceHanSans-Black;
+}
