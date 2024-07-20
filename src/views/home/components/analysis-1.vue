@@ -51,7 +51,7 @@ const tableData = reactive([
   width: 6rem;
 }
 .row-title {
-  padding: 0.22rem 0 0.3rem 0.2rem;
+  padding: 0.2rem 0 0.28rem 0.2rem;
   color: #77d1fa;
   font-size: 0.2rem;
   text-align: left;

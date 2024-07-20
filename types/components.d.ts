@@ -9,6 +9,10 @@ declare module 'vue' {
   export interface GlobalComponents {
     CuButton: typeof import('./../src/components/cu-button/index.vue')['default']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
+    ElDropdown: typeof import('element-plus/es')['ElDropdown']
+    ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
+    ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     LineChart: typeof import('./../src/components/Charts/LineChart.vue')['default']
     Panel: typeof import('./../src/components/Panel/index.vue')['default']

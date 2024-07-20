@@ -21,7 +21,7 @@ defineProps({
   z-index: 2;
 }
 .panel-title {
-  margin-top: 0.2rem;
+  margin-top: 0.07rem;
   margin-bottom: 0.2rem;
   font-size: 0.2rem;
   text-align: left;

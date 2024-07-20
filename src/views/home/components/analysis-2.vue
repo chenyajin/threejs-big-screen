@@ -68,6 +68,20 @@ const option = {
       labelLine: {
         show: false
       },
+      tooltip: {
+        trigger: "item",
+        formatter: function (params) {
+          return [
+            '<span style="background-color: rgba(247, 248, 255, 0.08)"><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' +
+              params.color +
+              '"></span>',
+            '<span style="display:inline-block;margin-left:0.02rem;margin-right:0.2rem;font-size: 0.14rem;">' +
+              params.name +
+              "</span>",
+            '<span style="font-size: 0.14rem;">' + params.value + "</span></span>"
+          ].join("");
+        }
+      },
       color: ["#2386DE", "#E2BC52", "#FC8C44"],
       data: [
         { value: 180, name: "运行稳定" },
@@ -95,7 +109,7 @@ onMounted(() => {
   margin-left: 0.24rem;
 }
 .title-block {
-  padding: 0.22rem 0 0.25rem 0.2rem;
+  padding: 0.2rem 0 0.2rem 0.2rem;
   color: #77d1fa;
   font-size: 0.2rem;
   text-align: left;
@@ -111,7 +125,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     margin-left: 0.48rem;
-    margin-bottom: 0.05rem;
+    margin-bottom: 0.11rem;
   }
   .col-item {
     margin: 0 0.06rem;
@@ -123,6 +137,9 @@ onMounted(() => {
   width: 0.16rem;
   height: 0.08rem;
   border-radius: 0.02rem;
+}
+.left-col {
+  flex: 1;
 }
 .right-col {
   position: relative;

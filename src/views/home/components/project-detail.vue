@@ -68,7 +68,7 @@ const tableData = reactive([
 <style lang="scss" scoped>
 .panel-wrapper {
   // padding: 0.2rem;
-  font-size: 14px;
+  font-size: 0.14rem;
 }
 .header-row {
   color: #abdfff;

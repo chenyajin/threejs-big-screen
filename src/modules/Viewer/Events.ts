@@ -1,20 +1,23 @@
 export default {
-  animate: 'animate',
-  dispose: 'dispose',
-  orbitChange: 'orbitChange',
+  animate: "animate",
+  dispose: "dispose",
+  orbitChange: "orbitChange",
   load: {
-    start: 'load:start',
-    processing: 'load:processing',
-    finish: 'load:finish',
+    start: "load:start",
+    processing: "load:processing",
+    finish: "load:finish"
   },
   click: {
-    raycaster: 'click:raycaster',
+    raycaster: "click:raycaster"
   },
   dblclick: {
-    raycaster: 'dblclick:raycaster',
+    raycaster: "dblclick:raycaster"
   },
   mousemove: {
-    raycaster: 'mousemove:raycaster',
+    raycaster: "mousemove:raycaster"
   },
-  resize: 'resize',
+  mousedown: {
+    raycaster: "mousedown:raycaster"
+  },
+  resize: "resize"
 };

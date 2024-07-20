@@ -1,10 +1,10 @@
-import type { Object3DExtends } from '@/types';
-import * as THREE from 'three';
-import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import type { Material } from 'three';
-import { clone } from 'three/examples/jsm/utils/SkeletonUtils';
-import type Viewer from '../Viewer';
-import type { Animate } from '../Viewer';
+import type { Object3DExtends } from "@/types";
+import * as THREE from "three";
+import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
+import type { Material } from "three";
+import { clone } from "three/examples/jsm/utils/SkeletonUtils";
+import type Viewer from "../Viewer";
+import type { Animate } from "../Viewer";
 
 export default class BaseModel {
   protected viewer: Viewer;
@@ -12,8 +12,8 @@ export default class BaseModel {
   public object: THREE.Group;
   /**模型原始材质 */
   public originMaterials: Material[] = [];
-  public isSaveMaterial: boolean = false;
-  public animaIndex: number = -1;
+  public isSaveMaterial = false;
+  public animaIndex = -1;
   public mixer!: THREE.AnimationMixer;
   public clock: THREE.Clock;
   public animaObject!: Animate;
@@ -26,11 +26,11 @@ export default class BaseModel {
     this.clock = new THREE.Clock();
   }
   /**
-  * 设置模型比例
-  * @param x 可以只填写一个参数
-  * @param y 纵轴缩放
-  * @param z 横轴缩放
-  */
+   * 设置模型比例
+   * @param x 可以只填写一个参数
+   * @param y 纵轴缩放
+   * @param z 横轴缩放
+   */
   public setScalc(x: number, y?: number, z?: number) {
     this.object.scale.set(x, y || x, z || x);
   }
@@ -43,9 +43,9 @@ export default class BaseModel {
   }
 
   /**
-  * 设置模型动画
-  * @param i 选择模型动画进行播放
-  */
+   * 设置模型动画
+   * @param i 选择模型动画进行播放
+   */
   public startAnima(i = 0) {
     this.animaIndex = i;
     if (!this.mixer) this.mixer = new THREE.AnimationMixer(this.object);
@@ -54,7 +54,7 @@ export default class BaseModel {
     // 传入参数需要将函数与函数参数分开，在运行时填入
     this.animaObject = {
       fun: this.updateAnima,
-      content: this,
+      content: this
     };
     this.viewer.addAnimate(this.animaObject);
   }
@@ -92,7 +92,7 @@ export default class BaseModel {
   }
 
   /**设置模型颜色 */
-  public setColor(color = 'yellow', opacity = 0.5) {
+  public setColor(color = "yellow", opacity = 0.5) {
     if (!this.isSaveMaterial) this.originMaterials = [];
     this.gltf.scene.traverse((model: Object3DExtends) => {
       if (model.isMesh) {
@@ -103,7 +103,7 @@ export default class BaseModel {
           depthTest: false,
           depthWrite: true, // 无法被选择，鼠标穿透
           color: new THREE.Color(color),
-          opacity: opacity,
+          opacity: opacity
         });
       }
     });

@@ -27,28 +27,36 @@
 
 <script setup name="Analysis3">
 import { useChart } from "@/hooks/useChart";
+import { deviceAlarmStatus } from "@/mock/deviceAlarm";
 
 const tableName = reactive([
   {
     id: 1,
-    name: "脱落",
-    data: 397,
+    name: "Sp02 传感器脱落",
     color: "#2386DE",
-    radio: "50%"
+    data: 30,
+    radio: "54%"
   },
   {
     id: 2,
     name: "关机",
-    data: 291,
     color: "#16B37C",
-    radio: "33.3%"
+    data: 11,
+    radio: "20%"
   },
   {
     id: 3,
     name: "屏幕损坏",
-    data: 119,
     color: "#FC8C44",
-    radio: "16.7%"
+    data: 7,
+    radio: "12.7%"
+  },
+  {
+    id: 4,
+    name: "屏幕损坏",
+    color: "#FC8C44",
+    data: 5,
+    radio: "9.1%"
   }
 ]);
 const option = {
@@ -72,11 +80,27 @@ const option = {
       labelLine: {
         show: false
       },
-      color: ["#2386DE", "#16B37C", "#FC8C44"],
+      tooltip: {
+        trigger: "item",
+        formatter: function (params) {
+          return [
+            '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' +
+              params.color +
+              '"></span>',
+            '<span style="display:inline-block;margin-left:0.02rem;margin-right:0.2rem;font-size: 0.14rem;">' +
+              params.name +
+              "</span>",
+            '<span style="font-size: 0.14rem;">' + params.value + "</span>",
+            "%"
+          ].join("");
+        }
+      },
+      color: ["#2386DE", "#16B37C", "#FC8C44", "#FC8C44"],
       data: [
-        { value: 180, name: "脱落" },
-        { value: 2, name: "关机" },
-        { value: 12, name: "屏幕损坏" }
+        { value: 54, name: "关机" },
+        { value: 20, name: "屏幕损坏" },
+        { value: 12.7, name: "脱落" },
+        { value: 9.1, name: "脱落" }
       ]
     }
   ]
@@ -84,8 +108,17 @@ const option = {
 const analysis3Pie = ref(null);
 const { setOptions } = useChart(analysis3Pie);
 onMounted(() => {
+  getData();
   setOptions(option);
 });
+
+const getData = () => {
+  const devices = deviceAlarmStatus.biz_device_alarm;
+  devices.forEach((item, index) => {
+    tableName[index].name = item["alarm_name"];
+    option.series[0].data[index].name = item["alarm_name"];
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -94,12 +127,12 @@ onMounted(() => {
   backdrop-filter: blur(8px);
   border-radius: 12px;
   height: 1.8rem;
-  width: 4.56rem;
+  width: 4.72rem;
   display: flex;
   margin-left: 0.24rem;
 }
 .title-block {
-  padding: 0.22rem 0 0.25rem 0.2rem;
+  padding: 0.2rem 0 0.08rem 0.2rem;
   color: #77d1fa;
   font-size: 0.2rem;
   text-align: left;
@@ -114,19 +147,28 @@ onMounted(() => {
   .row-content {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-left: 0.48rem;
-    margin-bottom: 0.05rem;
+    margin-bottom: 0.07rem;
   }
   .col-item-name {
     display: inline-block;
-    width: 0.7rem;
+    width: 1.3rem;
     margin: 0 0.06rem;
     color: #82badc;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .col-item-data {
+    display: inline-block;
+    text-align: left;
+    width: 0.3rem;
   }
   .col-item-radio {
     display: inline-block;
     width: 0.65rem;
-    text-align: right;
+    text-align: left;
   }
 }
 .block-small {
@@ -139,7 +181,6 @@ onMounted(() => {
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 0.18rem;
   .absolute-block {
     position: absolute;
     left: 50%;

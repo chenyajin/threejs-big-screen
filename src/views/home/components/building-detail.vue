@@ -1,6 +1,8 @@
 <template>
   <div class="wrapper">
-    <div class="select-wrapper"></div>
+    <div class="select-wrapper">
+      <SelectGroup />
+    </div>
     <div class="building-wrapper">
       <div class="building-name">#9栋</div>
       <svg-icon icon-class="building-check" class="inner-building" />
@@ -24,7 +26,7 @@
 </template>
 
 <script setup name="BuildingDetailChart">
-import buildingImg from "@/assets/images/building.png";
+import SelectGroup from "./select-group.vue";
 </script>
 
 <style lang="scss" scoped>

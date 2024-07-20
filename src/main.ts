@@ -6,6 +6,7 @@ import zhLocale from "element-plus/es/locale/lang/zh-cn";
 import "@/assets/styles/index.scss";
 import "virtual:svg-icons-register";
 import SvgIcon from "@/components/svgIcon/index.vue";
+import "./global.scss";
 
 const app = createApp(App);
 app.component("SvgIcon", SvgIcon);

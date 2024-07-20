@@ -13,10 +13,13 @@
       </div>
       <Sence></Sence>
       <div class="layout-content-bottom">
-        <Analysis1 />
-        <Analysis2 />
-        <Analysis3 />
-        <Analysis4 />
+        <LegendGroup />
+        <div class="flex-wrapper">
+          <Analysis1 />
+          <Analysis2 />
+          <Analysis3 />
+          <Analysis4 />
+        </div>
       </div>
     </div>
   </div>
@@ -27,6 +30,7 @@ import Header from "@/layout/components/Header.vue";
 import ProjectDetailChart from "./components/project-detail.vue";
 import BuildingDetailChart from "./components/building-detail.vue";
 import Sence from "@/components/Sence.vue";
+import LegendGroup from "./components/legend-group.vue";
 import Analysis1 from "./components/analysis-1.vue";
 import Analysis2 from "./components/analysis-2.vue";
 import Analysis3 from "./components/analysis-3.vue";
@@ -58,15 +62,17 @@ import Analysis4 from "./components/analysis-4.vue";
 .layout-content-right {
   position: absolute;
   right: 0.63rem;
-  top: 70px;
+  top: 0.28rem;
   width: 2.59rem;
 }
 .layout-content-bottom {
-  display: flex;
   position: absolute;
   bottom: 0.4rem;
   left: 50%;
   transform: translateX(-50%);
+}
+.flex-wrapper {
+  display: flex;
 }
 .panel {
   margin-bottom: 0.3rem;

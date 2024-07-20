@@ -43,11 +43,27 @@ export default class Viewer {
   public directionalLight!: THREE.DirectionalLight;
   // 常量
   public ambientLightIntensity = 6;
-  public directionalLightIntensity = 5;
+  public directionalLightIntensity = 2;
+  public initLightIntensity = 0.1;
   private initCameraPositionX = 0;
   private initCameraPositionY = Math.tan(THREE.MathUtils.degToRad(25)) * 90;
-  private initCameraPositionZ = 90;
-
+  private initCameraPositionZ = 95;
+  private cube1X = -37.4;
+  private cube1Z = 13.75;
+  private cube2X = -37.4;
+  private cube2Z = 17;
+  private cubeWidth = 5.45;
+  private cubeHeight = 5;
+  private cubeDepth = 2.8;
+  private bedScaleY = 6;
+  public cube1!: THREE.Mesh;
+  public cube2!: THREE.Mesh;
+  public UPPERED!: any;
+  public INTERSECTED!: THREE.Mesh;
+  public showPanel = false;
+  public bed03!: THREE.Mesh;
+  public bed04!: THREE.Mesh;
+  public bedIndex!: number;
   constructor(id: string) {
     this.id = id;
     this.initViewer();
@@ -85,8 +101,16 @@ export default class Viewer {
         this.mouseEvent = event;
         this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        this.getRaycasterIntersectObjects();
         // @ts-expect-error
-        this.emitter.emit(Events[eventName].raycaster, this.getRaycasterIntersectObjects());
+        if (eventName === "mousedown") {
+          this.onMouseDown();
+          this.emitter.emit(Events[eventName].raycaster, this.bedIndex);
+        }
+        if (eventName === "mousemove") {
+          this.emitter.emit(Events[eventName].raycaster, this.showPanel);
+        }
+        // this.emitter.emit(Events[eventName].raycaster, this.getRaycasterIntersectObjects());
       }, 50);
       this.viewerDom.addEventListener(eventName, funWrap, false);
     };
@@ -94,6 +118,7 @@ export default class Viewer {
     initRaycasterEvent("click");
     initRaycasterEvent("dblclick");
     initRaycasterEvent("mousemove");
+    initRaycasterEvent("mousedown");
   }
 
   /**销毁场景 */
@@ -158,12 +183,12 @@ export default class Viewer {
     this.readerDom();
 
     // 全局的公共动画函数，添加函数可同步执行
-    // this.animateEventList.forEach(event => {
-    //   // event.fun && event.content && event.fun(event.content);
-    //   if (event.fun && event.content) {
-    //     event.fun(event.content);
-    //   }
-    // });
+    this.animateEventList.forEach(event => {
+      // event.fun && event.content && event.fun(event.content);
+      if (event.fun && event.content) {
+        event.fun(event.content);
+      }
+    });
   };
 
   public initRenderer() {
@@ -212,10 +237,13 @@ export default class Viewer {
 
   private initLight() {
     // 环境光
-    this.ambientLight = new AmbientLight(0xffffff, 0.6);
+    this.ambientLight = new AmbientLight(0xffffff, this.ambientLightIntensity * this.initLightIntensity);
     this.scene.add(this.ambientLight);
     // 创建一个方向光实例
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    this.directionalLight = new THREE.DirectionalLight(
+      0xffffff,
+      this.directionalLightIntensity * this.initLightIntensity
+    );
     this.directionalLight.position.set(1, 1, 1).normalize();
     // light.castShadow = true;
 
@@ -238,6 +266,7 @@ export default class Viewer {
 
   // 更新dom
   private updateDom() {
+    TWEEN.update();
     this.controls.update();
     // 更新参数
     this.camera.aspect = this.viewerDom.clientWidth / this.viewerDom.clientHeight; // 摄像机视锥体的长宽比，通常是使用画布的宽/画布的高
@@ -247,16 +276,16 @@ export default class Viewer {
   }
   // 模型加载完成的回调函数
   public onModelLoaded() {
-    const duration = 1200;
+    const duration = 1000;
     const moveFunc = TWEEN.Easing.Cubic.Out;
     // 创建一个Tween对象，从当前的zoom值到目标值
 
     setTimeout(() => {
-      new TWEEN.Tween(this.camera)
+      const tween = new TWEEN.Tween(this.camera);
+      tween
         .to({ zoom: 1 }, duration) // 目标值和动画持续时间（毫秒）
         .easing(moveFunc) // 缓动函数
         .onUpdate(() => {
-          debugger;
           this.camera.updateProjectionMatrix(); // 更新投影矩阵，重要！
         })
         .start();
@@ -265,7 +294,6 @@ export default class Viewer {
         .to({ intensity: this.ambientLightIntensity }, duration) // 目标值和动画持续时间（毫秒）
         .easing(moveFunc) // 缓动函数
         .onUpdate(delta => {
-          debugger;
           this.ambientLight.intensity = delta.intensity;
         })
         .start();
@@ -278,7 +306,7 @@ export default class Viewer {
           // console.log(delta.intensity);
         })
         .start();
-    }, 1500); // 1秒后开始 Tween
+    }, 1000); // 1秒后开始 Tween
   }
 
   /**自定义鼠标事件触发的范围，给定一个模型组，对给定的模型组鼠标事件才生效 */
@@ -287,9 +315,122 @@ export default class Viewer {
   }
 
   private getRaycasterIntersectObjects(): THREE.Intersection[] {
-    if (!this.raycasterObjects.length) return [];
+    // if (!this.raycasterObjects.length) return [];
     this.raycaster.setFromCamera(this.mouse, this.camera);
-    return this.raycaster.intersectObjects(this.raycasterObjects, true);
+    const intersects = this.raycaster.intersectObjects(this.scene.children, false);
+    this.showPanelInit(intersects);
+    return intersects;
+    // return this.raycaster.intersectObjects(this.raycasterObjects, true);
+  }
+
+  private showPanelInit(intersects) {
+    let needClear = true;
+    let needDown = true;
+    if (intersects.length > 0) {
+      const itobj = intersects[0].object;
+      if (itobj == this.cube1 || itobj == this.cube2) {
+        needClear = false;
+        if (this.INTERSECTED != itobj) {
+          if (this.INTERSECTED) {
+            this.INTERSECTED.material.color.setHex(this.INTERSECTED.currentHex);
+            this.INTERSECTED.material.opacity = 0;
+          }
+          this.INTERSECTED = itobj;
+          this.INTERSECTED.currentHex = this.INTERSECTED.material.color.getHex();
+          // INTERSECTED.material.color.setHex(0x1be8ee);
+          this.INTERSECTED.material.color.setHex(0x2cf3f4);
+          this.INTERSECTED.material.opacity = 0.4;
+        } else {
+          needDown = false;
+        }
+      }
+    }
+
+    if (needClear) {
+      if (this.INTERSECTED) {
+        this.INTERSECTED.material.color.setHex(this.INTERSECTED.currentHex);
+        this.INTERSECTED.material.opacity = 0;
+      }
+      this.INTERSECTED = null;
+    }
+
+    if (needDown) {
+      if (this.UPPERED) {
+        this.downBed(this.UPPERED);
+      }
+      this.UPPERED = null;
+      this.bedIndex = 0;
+    }
+  }
+
+  public setBed03(bed03) {
+    this.bed03 = bed03;
+  }
+
+  public setBed04(bed04) {
+    this.bed04 = bed04;
+  }
+
+  public onMouseDown() {
+    if (this.INTERSECTED == this.cube1 || this.INTERSECTED == this.cube2) {
+      if (this.INTERSECTED != this.UPPERED) {
+        if (this.UPPERED) {
+          this.downBed(this.UPPERED);
+        }
+      }
+
+      // 升起来
+      if (this.INTERSECTED == this.cube1) {
+        this.UPPERED = this.bed03;
+        this.bedIndex = 2;
+        this.upBed(this.UPPERED);
+      } else if (this.INTERSECTED == this.cube2) {
+        this.UPPERED = this.bed04;
+        this.bedIndex = 3;
+        this.upBed(this.UPPERED);
+      }
+    }
+  }
+  public upBed(bed) {
+    new TWEEN.Tween(bed.scale)
+      .to({ x: 1, y: this.bedScaleY, z: 1 }, 800) // 目标尺寸和动画持续时间
+      .easing(TWEEN.Easing.Cubic.Out) // 使用二次方缓动
+      .onComplete(() => {
+        this.showPanel = true;
+      })
+      .start();
+  }
+
+  public downBed(bed) {
+    this.showPanel = false;
+    new TWEEN.Tween(bed.scale)
+      .to({ x: 1, y: 1, z: 1 }, 800) // 目标尺寸和动画持续时间
+      .easing(TWEEN.Easing.Cubic.Out) // 使用二次方缓动
+      .start();
+  }
+
+  public loadCube(callback) {
+    const geometry = new THREE.BoxGeometry(this.cubeWidth, this.cubeHeight, this.cubeDepth);
+    // 创建一个透明的材质
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x000000, // 绿色
+      transparent: true,
+      opacity: 0.0 // 设置不完全透明
+    });
+    // 创建一个网格对象，结合几何体和材质
+    this.cube1 = new THREE.Mesh(geometry, material);
+    // 设置立方体的位置
+    this.cube1.position.set(this.cube1X, this.cubeHeight / 2, this.cube1Z); // 默认位置，你可以修改这些值
+    // 将网格对象添加到场景中
+    this.scene.add(this.cube1);
+
+    // 创建一个网格对象，结合几何体和材质
+    this.cube2 = new THREE.Mesh(geometry, material.clone());
+    // 设置立方体的位置
+    this.cube2.position.set(this.cube2X, this.cubeHeight / 2, this.cube2Z); // 默认位置，你可以修改这些值
+    // 将网格对象添加到场景中
+    this.scene.add(this.cube2);
+    callback && callback(this.cube1, this.cube2);
   }
 
   // 设置俯视图
@@ -322,7 +463,7 @@ export default class Viewer {
         {
           // 相机结束坐标
           x: 0,
-          y: 100,
+          y: 110,
           z: 1,
           // 相机结束指向的目标观察点
           tx: 0,
